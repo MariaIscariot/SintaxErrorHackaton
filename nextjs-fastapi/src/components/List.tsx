@@ -3,15 +3,17 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-const Source = () => {
+const List = () => {
   interface Announcement {
     content: string | null;
     title: string;
+    // author: string| null;
     source: string;
     author: string;
     publish_date: string;
     diagram_title: string;
     diagram_value: number;
+   
   }
 
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
@@ -24,7 +26,7 @@ const Source = () => {
         const response = await axios.post(
           "https://0411-93-113-114-106.ngrok-free.app/rec_one",
           {
-            news_url: "https://noi.md/ru/politika/o-chem-govorili-majya-sandu-i-vladimir-zelenskij-na-vstreche-v-kieve",
+            news_url: "https://moldova.europalibera.org/a/trump-si-a-pus-in-miscare-tavalugul-conservator-zeci-de-ordine-executive-impotriva-imigratiei-diversitatii-sau-protectiei-mediului/33283154.html",
             lang: "ron",
           },
           {
@@ -71,7 +73,7 @@ const Source = () => {
     const strokeDashoffset = circumference - (percentage / 100) * circumference;
 
     return (
-      <div className="flex flex-col items-center mt-2">
+      <div className="flex flex-col h-[125px] items-center mt-2">
         <div className="relative">
           <svg width="50" height="50" className="rotate-90">
             <circle
@@ -134,7 +136,7 @@ const Source = () => {
                 </p>
                 <div className="mt-2 flex flex-wrap gap-2">
                   <span className="text-xs text-gray-500">
-                    Author: {announcement.author || "Unknown"} | Source:{" "}
+                    Author: {announcement.author || "Unknown"} | List:{" "}
                     {announcement.source || "Unknown"}
                   </span>
                 </div>
@@ -150,4 +152,4 @@ const Source = () => {
   );
 };
 
-export default Source;
+export default List;
