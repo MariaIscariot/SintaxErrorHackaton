@@ -36,7 +36,6 @@ const EmotionChart = () => {
           }
         );
 
-        // Проверяем, что данные пришли в корректном формате
         if (Array.isArray(response.data)) {
           console.log("API Response:", response.data);
           const formattedData = response.data.map(({ emotion, value }: { emotion: string, value: number }) => ({
@@ -44,7 +43,7 @@ const EmotionChart = () => {
             value: value * 100,
           }));
           console.log("Formatted Data for Chart:", formattedData);
-          setData(formattedData); // Сохраняем данные в стейт
+          setData(formattedData);
         } else {
           throw new Error("Unexpected API response format");
         }
@@ -60,8 +59,8 @@ const EmotionChart = () => {
   }, []);
 
   return (
-    <div className="bg-white rounded-lg p-4 h-full">
-      <h1 className="text-lg font-semibold mb-4">Emotion Analysis</h1>
+    <div className="bg-white rounded-lg p-6 h-[600px]">
+      <h1 className="text-xl font-semibold mb-4">Emotion Analysis</h1>
       {loading ? (
         <p className="text-gray-500 text-sm">Loading data...</p>
       ) : error ? (
@@ -69,31 +68,34 @@ const EmotionChart = () => {
       ) : data.length === 0 ? (
         <p className="text-gray-500 text-sm">No data available to display.</p>
       ) : (
-        <ResponsiveContainer width="100%" height={400}>
-          <BarChart data={data} barSize={20}>
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart data={data} barSize={30}>
             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#ddd" />
             <XAxis
               dataKey="emotion"
               axisLine={false}
-              tick={{ fill: "##e3e6eb" }}
+              tick={{ fill: "#6b7280", fontSize: 10 }}
               tickLine={false}
+              interval={0}
+              tickMargin={12}
+              angle={-10}
+              textAnchor="end"
             />
             <YAxis
-  domain={[0, 20]} // Измените диапазон под проценты, если нужно
-  axisLine={false}
-  tick={{ fill: "#d1d5db" }}
-  tickLine={false}
-  tickFormatter={(tick) => `${tick}%`} // Добавляем знак процента к значениям
-/>
-<Tooltip
-  contentStyle={{ borderRadius: "10px", borderColor: "lightgray" }}
-  formatter={(value: number) => `${value.toFixed(2)}%`} // Показываем проценты в подсказке
-/>
-
+              domain={[0, 20]}
+              axisLine={false}
+              tick={{ fill: "#d1d5db" }}
+              tickLine={false}
+              tickFormatter={(tick) => `${tick}%`}
+            />
+            <Tooltip
+              contentStyle={{ borderRadius: "10px", borderColor: "lightgray" }}
+              formatter={(value: number) => `${value.toFixed(2)}%`}
+            />
             <Legend
               align="left"
               verticalAlign="top"
-              wrapperStyle={{ paddingTop: "10px", paddingBottom: "20px" }}
+              wrapperStyle={{ paddingTop: "20px", paddingBottom: "10px" }}
             />
             <Bar
               dataKey="value"

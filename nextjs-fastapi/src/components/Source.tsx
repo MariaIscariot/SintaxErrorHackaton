@@ -3,9 +3,9 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-const Source = () => {
+const Announcements = () => {
   interface Announcement {
-    content: string | null;
+    content: string;
     title: string;
     source: string;
     author: string;
@@ -22,7 +22,7 @@ const Source = () => {
         const response = await axios.post(
           "https://0411-93-113-114-106.ngrok-free.app/rec_one",
           {
-            news_url: "https://noi.md/ru/politika/o-chem-govorili-majya-sandu-i-vladimir-zelenskij-na-vstreche-v-kieve",
+            news_url: "https://moldova.europalibera.org/a/trump-si-a-pus-in-miscare-tavalugul-conservator-zeci-de-ordine-executive-impotriva-imigratiei-diversitatii-sau-protectiei-mediului/33283154.html",
             lang: "ron",
           },
           {
@@ -32,8 +32,8 @@ const Source = () => {
             },
           }
         );
-        console.log("API Response:", response.data); // Log the response for debugging
-        setAnnouncements(response.data); // Set the data to announcements state
+        console.log("API Response:", response.data); // Лог ответа
+        setAnnouncements(response.data); // Устанавливаем массив данных
       } catch (err: any) {
         console.error("Failed to fetch announcements:", err);
         setError(err.message || "Unable to load announcements. Please try again later.");
@@ -65,20 +65,21 @@ const Source = () => {
     <div className="bg-white p-4 rounded-md shadow-md">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h1 className="text-font font-semibold text-gray-700">Announcements</h1>
+        <h1 className="text-font font-semibold text-gray-700">Source</h1>
         <span className="text-xs text-gray-400 cursor-pointer hover:text-gray-600">
           View All
         </span>
       </div>
 
-      {/* Announcement Content */}
+      {/* Announcements Content */}
       <div className="flex flex-col gap-4 mt-4">
-        {loading && <p className="text-sm text-gray-500">Loading announcements...</p>}
+        {loading && <p className="text-sm text-gray-500">Loading source...</p>}
         {error && <p className="text-sm text-red-500">{error}</p>}
         {!loading && !error && announcements.length === 0 && (
-          <p className="text-sm text-gray-500">No announcements available.</p>
+          <p className="text-sm text-gray-500">No source available.</p>
         )}
-        {!loading && !error && announcements.length > 0 && (
+        {!loading &&
+          !error &&
           announcements.map((announcement, index) => (
             <div
               key={index}
@@ -106,11 +107,10 @@ const Source = () => {
                 </div>
               </div>
             </div>
-          ))
-        )}
+          ))}
       </div>
     </div>
   );
 };
 
-export default Source;
+export default Announcements;

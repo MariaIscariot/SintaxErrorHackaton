@@ -22,7 +22,7 @@ const Announcements = () => {
         const response = await axios.post(
           "https://0411-93-113-114-106.ngrok-free.app/meta",
           {
-            news_url: "https://noi.md/ru/politika/o-chem-govorili-majya-sandu-i-vladimir-zelenskij-na-vstreche-v-kieve",
+            news_url: "https://moldova.europalibera.org/a/trump-si-a-pus-in-miscare-tavalugul-conservator-zeci-de-ordine-executive-impotriva-imigratiei-diversitatii-sau-protectiei-mediului/33283154.html",
             lang: "ron",
           },
           {

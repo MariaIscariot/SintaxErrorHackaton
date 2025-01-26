@@ -45,7 +45,7 @@ const AdminPage = () => {
         </div>
 
         {/* LINEAR CHART */}
-        <div className="w-full h-[300px] shadow-lg rounded-2xl bg-white">
+        <div className="w-full shadow-lg rounded-2xl ">
           <List />
         </div>
       </div>
@@ -53,12 +53,12 @@ const AdminPage = () => {
       {/* RIGHT PANEL */}
       <div className="w-full lg:w-1/3 flex flex-col gap-4">
         {/* ATTENDANCE CHART */}
-        <div className="h-[450px] shadow-lg rounded-2xl bg-white">
+        <div className="h-[650px]  shadow-lg rounded-2xl bg-white">
           <EmotionChart />
         </div>
 
         {/* RECTANGULAR ANNOUNCEMENT */}
-        <div className="w-full h-[350px] shadow-lg rounded-2xl bg-white">
+        <div className="w-full h-[400px] shadow-lg rounded-2xl bg-white">
           <Source />
         </div>
       </div>
