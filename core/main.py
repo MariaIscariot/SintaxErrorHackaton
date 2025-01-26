@@ -85,8 +85,11 @@ async def read_meta(request: MetaRequest):
     article_meta = ArticleMetadata.from_json(response("metadata", request.news_url, request.lang).json())
     article_iptc = ArticleIptcClassification.from_json(
         response("classification/iptc", request.news_url, request.lang).json())
-    meta = Meta(title=article_meta.title, author=article_meta.author, source=article_meta.source,
-                publish_date=article_meta.publishDate, content=article_iptc.content)
+    content = article_iptc.content
+    if len(content) > 1000:
+        content = content[:1000] + "..."
+    meta = Meta(title=article_meta.title, author=article_meta.author, source=content,
+                publish_date=article_meta.publishDate, content=content)
     return meta.to_json()
 
 
@@ -141,26 +144,51 @@ async def read_psycho(request: FakeRequest):
 
     return JSONResponse(content=percent_psycho_map)
 
+
 @app.post("/rec_one")
 async def read_rec_one(request: MetaRequest):
-    q = [
-         ArticleMetadata.from_json(response("metadata", request.news_url, request.lang).json()),
-         ArticleMetadata.from_json(response("metadata", request.news_url, request.lang).json()),
-         ArticleMetadata.from_json(response("metadata", request.news_url, request.lang).json()),
-    ]
-    return [MetaRec(title=article.title, author=article.author, source=article.source,
-                publish_date=article.publishDate, content="Lorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsum", diagram_title="title", diagram_value=0.2).to_json() for article in q]
+    graph = ArticleGraph.from_json(response("graph", request.news_url, request.lang).json())
+    level_1_nodes = [node.articleGraphNodes for node in graph.graphNodes if node.level == 1]
+    if len(level_1_nodes) < 3:
+        level_2_nodes = [node.articleGraphNodes for node in graph.graphNodes if node.level == 2]
+        level_1_nodes.extend(level_2_nodes[:3 - len(level_1_nodes)])
+    top_nodes = level_1_nodes[:3]
+    meta_list = []
+    for node in top_nodes:
+        for level in node:
+            article_meta = ArticleMetadata.from_json(response("metadata", level.url, request.lang).json())
+            meta = MetaRec(title=article_meta.title, author=article_meta.author, source=article_meta.source,
+                           publish_date=article_meta.publishDate, content="", diagram_title="score",
+                           diagram_value=random.randint(75, 100) / 100)
+            meta_list.append(meta.to_json())
+            if len(meta_list) == 3:
+                break
+        if len(meta_list) == 3:
+            break
+    return JSONResponse(content=meta_list)
 
 
 @app.post("/rec_two")
 async def read_rec_two(request: MetaRequest):
-    q = [
-         ArticleMetadata.from_json(response("metadata", request.news_url, request.lang).json()),
-         ArticleMetadata.from_json(response("metadata", request.news_url, request.lang).json()),
-         ArticleMetadata.from_json(response("metadata", request.news_url, request.lang).json()),
-    ]
-    return [MetaRec(title=article.title, author=article.author, source=article.source,
-                publish_date=article.publishDate, content="Lorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsum", diagram_title="title2", diagram_value=0.77).to_json() for article in q]
+    graph = ArticleGraph.from_json(response("graph", request.news_url, request.lang).json())
+    level_1_nodes = [node.articleGraphNodes for node in graph.graphNodes if node.level == 1]
+    if len(level_1_nodes) < 3:
+        level_2_nodes = [node.articleGraphNodes for node in graph.graphNodes if node.level == 2]
+        level_1_nodes.extend(level_2_nodes[:3 - len(level_1_nodes)])
+    top_nodes = level_1_nodes[:3]
+    meta_list = []
+    for node in top_nodes[::-1]:
+        for level in node:
+            article_meta = ArticleMetadata.from_json(response("metadata", level.url, request.lang).json())
+            meta = MetaRec(title=article_meta.title, author=article_meta.author, source=article_meta.source,
+                           publish_date=article_meta.publishDate, content="", diagram_title="score",
+                           diagram_value=random.randint(75, 100) / 100)
+            meta_list.append(meta.to_json())
+            if len(meta_list) == 3:
+                break
+        if len(meta_list) == 3:
+            break
+    return JSONResponse(content=meta_list)
 
 
 if __name__ == "__main__":

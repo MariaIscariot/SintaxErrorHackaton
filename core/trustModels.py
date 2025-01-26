@@ -45,7 +45,7 @@ class NodeLevel(JsonModel):
     url: str
     parentId: str
     parentUrl: str
-    publishedTime: datetime
+    publishTime: str
 
 
 class GraphNode(JsonModel):

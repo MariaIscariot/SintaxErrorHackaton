@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 # Emotion dictionary
 emotion_map = {
     1: 'anger',
-    2: 'anticipation',
+    2: 'expect',
     3: 'disgust',
     4: 'fear',
     5: 'joy',
