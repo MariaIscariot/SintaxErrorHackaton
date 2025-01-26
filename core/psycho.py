@@ -82,7 +82,7 @@ def analyze_text_with_ngrams(text, word_emotion_df, n=2):
     return emotion_scores, influencing_ngrams
 
 # Input text for analysis
-print("\nEnter text for analysis:")
+# print("\nEnter text for analysis:")
 # new_text = input("> ").strip()
 
 # Analyze text
