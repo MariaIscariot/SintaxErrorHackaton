@@ -4,6 +4,17 @@ from enum import Enum
 from pydantic import BaseModel
 
 
+class JsonModel(BaseModel):
+    def to_json(self):
+        return {k: (v if not isinstance(v, Enum) else v.value) for k, v in self.__dict__.items()}
+
+    @classmethod
+    def from_json(cls, data: dict):
+        return cls(**data)
+
+    pass
+
+
 class IptcClassification(Enum):
     ECONOMY_BUSINESS = "economy, business and finance",
     ARTS_CULTURE = "arts, culture and entertainment",
@@ -22,29 +33,12 @@ class ArticleClickbait(BaseModel):
         return cls(**data)
 
 
-class ArticleMetadata(BaseModel):
+class ArticleMetadata(JsonModel):
     author: str
     publishDate: str
     source: str
     title: str
 
-    def to_json(self):
-        return {k: (v if not isinstance(v, Enum) else v.value) for k, v in self.__dict__.items()}
-
-    @classmethod
-    def from_json(cls, data: dict):
-        return cls(**data)
-
-
-class JsonModel(BaseModel):
-    def to_json(self):
-        return {k: (v if not isinstance(v, Enum) else v.value) for k, v in self.__dict__.items()}
-
-    @classmethod
-    def from_json(cls, data: dict):
-        return cls(**data)
-
-    pass
 
 class NodeLevel(JsonModel):
     id: str
@@ -53,10 +47,10 @@ class NodeLevel(JsonModel):
     parentUrl: str
     publishedTime: datetime
 
+
 class GraphNode(JsonModel):
     level: int
     articleGraphNodes: list[NodeLevel]
-
 
 
 class ArticleGraph(JsonModel):
@@ -66,13 +60,21 @@ class ArticleGraph(JsonModel):
 
 class ArticlePatientZero(JsonModel):
     patientZeroUrl: str
+
+
 class IptcClassificationType(JsonModel):
     type: str
     score: float
+
+
 class IptcClassify(JsonModel):
     classes: list[IptcClassificationType]
 
+
 class ArticleIptcClassification(JsonModel):
     classify: IptcClassify
-    content:str
+    content: str
 
+
+class ArticleTrustLevel(JsonModel):
+    trustLevel: int
